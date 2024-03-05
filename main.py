@@ -6,7 +6,7 @@ import textwrap
 
 sql = SQLconnect()
 
-bot = telebot.TeleBot('6773759575:AAHvrCPZx-2FmajnMOKGnN3xxRUsBE9CJt0', parse_mode='HTML')
+bot = telebot.TeleBot('6914373217:AAE3Ed21LFpqo1ykAcpOup2vmFcOIrnnWug', parse_mode='HTML')
 retur = telebot.types.ReplyKeyboardMarkup()
 retur.add(telebot.types.KeyboardButton('Назад'))
 
