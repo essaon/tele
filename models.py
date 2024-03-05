@@ -10,8 +10,11 @@ class SQLconnect():
         self.cursor.execute('CREATE TABLE IF NOT EXISTS taken (id TEXT)')
         
     def AddUser(self, id):
-        self.cursor.execute("INSERT INTO taken (id) VALUES (?)", (id,))
-        self.connect.commit()
+        if self.cursor.execute("SELECT id FROM taken WHERE id =?", (id,)).fetchone() != []:
+            pass           
+        else:
+            self.cursor.execute("INSERT INTO taken (id) VALUES (?)", (id,))
+            self.connect.commit()
     def CreateButtons(self,):
         self.cursor.execute("SELECT name FROM items")
         names = [row[0] for row in self.cursor.fetchall()]
@@ -47,10 +50,14 @@ class SQLconnect():
             return "Все предметы на месте!"
         
     def ListOfTakenByName(self, name):
-        self.cursor.execute(f"SELECT id, {name.upper()} FROM taken")
-        data = self.cursor.fetchall()
-        answer = f"<pre>{tabulate(data, headers = ['TAGS', f'{name.upper()}'],  tablefmt='orgtbl', colalign=('center',))}</pre>"
-        return answer
+        try:
+            self.cursor.execute(f"SELECT id, {name.upper()} FROM taken")
+            data = self.cursor.fetchall()
+            answer = f"<pre>{tabulate(data, headers = ['TAGS', f'{name.upper()}'],  tablefmt='orgtbl', colalign=('center',))}</pre>"
+            return answer
+        except sqlite3.Error as e:
+            print(f'Error: {e}')
+            return "Нету @, либо такого предмета нет"
 
     def ListOfTakenByTag(self, name):
         self.cursor.execute("SELECT * FROM taken WHERE id = ?", (name,))
