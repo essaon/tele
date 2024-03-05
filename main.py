@@ -66,14 +66,17 @@ def NameOrTagListBot(message):
 #Создание предмета в шкафу
 def NameOfItem(message):
     Name = message.text
-    if Name == 'Назад':
-        bot.send_message(message.chat_id, 'ок', reply_markup=markup)
-        bot.register_next_step_handler(message, Ans)
-    if len(Name) >=50 :
-        bot.send_message(message.chat.id, "Длинновато")
+    if " " in Name:
+        bot.send_message(message.chat_id, "Присутствуют пробелы")
     else:
-        bot.send_message(message.chat.id, "Введите описание (опционально)")
-        bot.register_next_step_handler(message,partial(discr, Name))
+        if Name == 'Назад':
+            bot.send_message(message.chat_id, 'ок', reply_markup=markup)
+            bot.register_next_step_handler(message, Ans)
+        if len(Name) >=15 :
+            bot.send_message(message.chat.id, "Длинновато")
+        else:
+            bot.send_message(message.chat.id, "Введите описание (опционально)")
+            bot.register_next_step_handler(message,partial(discr, Name))
 def discr(Name, message):
     Discription = message.text
     if Discription == 'Назад':
